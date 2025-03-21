@@ -9,11 +9,13 @@ SCRIPT_NAME="loopvideos.py"
 SERVICE_NAME="vlc_sync_video_looper.service"
 VENV_DIR="$INSTALL_DIR/venv"
 
-# Install git if not already installed
-if ! command -v git &> /dev/null; then
-    echo "Git is not installed. Installing git..."
+# Check if git is installed
+if ! [ -x "$(which git)" ]; then
+    echo "Error: Git is not installed. Installing git..."
     sudo apt-get update
     sudo apt-get install -y git
+else
+    echo "Git is already installed."
 fi
 
 # Clone the repository
