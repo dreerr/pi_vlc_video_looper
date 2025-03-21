@@ -7,4 +7,4 @@ This project sets up a Python script to synchronize and loop videos across multi
 Run the following command to install the script and set up the service:
 
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/dreerr/pi_vlc_video_looper/main/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/dreerr/vlc_sync_video_looper/main/install.sh)"
