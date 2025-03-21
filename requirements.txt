@@ -1,0 +1,2 @@
+# Python dependencies for vlc_sync_video_looper
+vlcsync==0.3.0
