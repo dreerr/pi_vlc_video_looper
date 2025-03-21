@@ -39,7 +39,7 @@ echo "Creating systemd service file..."
 SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME"
 cat > "$SERVICE_FILE" <<EOL
 [Unit]
-Description=VLC Sync Video Looper
+Description=VLC Sync Video Looper (Controller/Worker)
 After=network.target
 
 [Service]

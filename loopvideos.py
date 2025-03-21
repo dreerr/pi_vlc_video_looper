@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# The script is designed to synchronize and play videos across multiple devices using VLC Media Player. It operates in either "master" or "slave" mode, determined by a configuration file. In master mode, it ensures all slave devices are reachable and running VLC before starting playback and synchronization, while in slave mode, it directly launches VLC with predefined settings.
+# The script is designed to synchronize and play videos across multiple devices using VLC Media Player. It operates in either "controller" or "worker" mode, determined by a configuration file. In controller mode, it ensures all worker devices are reachable and running VLC before starting playback and synchronization, while in worker mode, it directly launches VLC with predefined settings.
 
 import os
 import time
@@ -24,7 +24,7 @@ if not DEFAULT_MEDIA_PATH:
     print("No .mp4 file found in the directory. Exiting.")
     exit(1)
 
-DEFAULT_SLAVE_COMMAND = [
+DEFAULT_WORKER_COMMAND = [
     "vlc",
     DEFAULT_MEDIA_PATH,
     "--rc-host",
@@ -35,10 +35,10 @@ DEFAULT_SLAVE_COMMAND = [
     "--no-video-title",
 ]
 
-# If config file does not exist, assume slave mode
+# If config file does not exist, assume worker mode
 if not os.path.isfile(CONFIG_FILE):
-    print("No config found, running in default slave mode...")
-    subprocess.run(DEFAULT_SLAVE_COMMAND)
+    print("No config found, running in default worker mode...")
+    subprocess.run(DEFAULT_WORKER_COMMAND)
     exit(0)
 
 # Read configuration
@@ -49,78 +49,78 @@ with open(CONFIG_FILE, "r") as f:
         config[key.strip()] = value.strip()
 
 # Validate config
-if "MODE" not in config or config["MODE"].lower() != "master":
-    print("Config found, but not master mode. Running as slave...")
-    subprocess.run(DEFAULT_SLAVE_COMMAND)
+if "MODE" not in config or config["MODE"].lower() != "controller":
+    print("Config found, but not controller mode. Running as worker...")
+    subprocess.run(DEFAULT_WORKER_COMMAND)
     exit(0)
 
-if "SLAVES" not in config:
-    print("No slaves defined in master mode. Exiting.")
+if "WORKERS" not in config:
+    print("No workers defined in controller mode. Exiting.")
     exit(1)
 
-# Extract slave addresses
-slave_addresses = config["SLAVES"].split(",")
+# Extract worker addresses
+worker_addresses = config["WORKERS"].split(",")
 
 
-def check_slave_reachability():
-    reachable_slaves = []
-    for slave in slave_addresses:
-        ip, port = slave.split(":")
+def check_worker_reachability():
+    reachable_workers = []
+    for worker in worker_addresses:
+        ip, port = worker.split(":")
         port = int(port)
 
         try:
             sock = socket.create_connection((ip, port), timeout=2)
             response = sock.recv(1024).decode("utf-8", errors="ignore")
             if "VLC media player" in response:
-                print(f"Slave {ip}:{port} is reachable and running VLC.")
-                reachable_slaves.append(slave)
+                print(f"Worker {ip}:{port} is reachable and running VLC.")
+                reachable_workers.append(worker)
             else:
-                print(f"Slave {ip}:{port} is reachable but not running VLC.")
+                print(f"Worker {ip}:{port} is reachable but not running VLC.")
             sock.close()
         except Exception as e:
-            print(f"Slave {ip}:{port} is unreachable: {e}")
-    return reachable_slaves
+            print(f"Worker {ip}:{port} is unreachable: {e}")
+    return reachable_workers
 
 
-# Wait until all slaves are reachable and running VLC
+# Wait until all workers are reachable and running VLC
 while True:
-    reachable_slaves = check_slave_reachability()
-    if len(reachable_slaves) == len(slave_addresses):
+    reachable_workers = check_worker_reachability()
+    if len(reachable_workers) == len(worker_addresses):
         break
-    print("Not all slaves are reachable or running VLC. Retrying in 5 seconds...")
+    print("Not all workers are reachable or running VLC. Retrying in 5 seconds...")
     time.sleep(5)
 
-# Start master VLC
-MASTER_RC_HOST = "127.0.0.42"
-MASTER_COMMAND = [
+# Start controller VLC
+CONTROLLER_RC_HOST = "127.0.0.42"
+CONTROLLER_COMMAND = [
     "vlc",
     DEFAULT_MEDIA_PATH,
     "--rc-host",
-    MASTER_RC_HOST,
+    CONTROLLER_RC_HOST,
     "--fullscreen",
     "--loop",
     "--repeat",
     "--no-video-title",
 ]
-print("Starting VLC master...")
-subprocess.Popen(MASTER_COMMAND)
+print("Starting VLC controller...")
+subprocess.Popen(CONTROLLER_COMMAND)
 
 # Start vlcsync in background
 VLCSYNC_COMMAND = ["/home/pi/vlcsync-venv/bin/vlcsync"]
-for slave in reachable_slaves:
-    VLCSYNC_COMMAND.extend(["--rc-host", slave])
+for worker in reachable_workers:
+    VLCSYNC_COMMAND.extend(["--rc-host", worker])
 
 print("Starting vlcsync...")
 subprocess.Popen(VLCSYNC_COMMAND)
 
-# Wait 5 seconds and send seek 0 command to first slave
-first_slave_ip, first_slave_port = reachable_slaves[0].split(":")
-print(f"Sending seek 0 command to {first_slave_ip}:{first_slave_port}...")
+# Wait 5 seconds and send seek 0 command to first worker
+first_worker_ip, first_worker_port = reachable_workers[0].split(":")
+print(f"Sending seek 0 command to {first_worker_ip}:{first_worker_port}...")
 time.sleep(10)
 subprocess.run(
     [
         "sh",
         "-c",
-        f"{{ echo 'seek 0'; sleep 1; }} | telnet {first_slave_ip} {first_slave_port}",
+        f"{{ echo 'seek 0'; sleep 1; }} | telnet {first_worker_ip} {first_worker_port}",
     ]
 )

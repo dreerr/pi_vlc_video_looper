@@ -3,8 +3,8 @@
 The VLC Sync Video Looper is a Python-based solution for synchronizing and looping videos across multiple devices using VLC Media Player. This project is ideal for creating synchronized video displays, such as multi-screen installations or video walls.
 
 The script can operate in two modes:
-- **Master Mode**: Controls playback and synchronization across all connected slave devices.
-- **Slave Mode**: Receives commands from the master and plays videos in sync.
+- **Controller Mode**: Controls playback and synchronization across all connected worker devices.
+- **Worker Mode**: Receives commands from the controller and plays videos in sync.
 
 The script is installed as a systemd service, ensuring it starts automatically on boot.
 
@@ -14,7 +14,7 @@ The script is installed as a systemd service, ensuring it starts automatically o
 
 - **Multi-Device Synchronization**: Synchronize video playback across multiple devices using VLC's remote control interface.
 - **Automatic Startup**: The script runs as a systemd service, starting automatically when the device boots.
-- **Flexible Configuration**: Easily configure master and slave devices using a simple configuration file.
+- **Flexible Configuration**: Easily configure controller and worker devices using a simple configuration file.
 - **Looping Playback**: Videos are looped seamlessly for continuous playback.
 
 ---
@@ -42,15 +42,15 @@ The script uses a configuration file (`vlcsync.conf`) to define its behavior. Th
 ### Sample Configuration File
 
 ```ini
-# Mode of operation: "master" or "slave"
-MODE=master
+# Mode of operation: "controller" or "worker"
+MODE=controller
 
-# Comma-separated list of slave devices with their IP addresses and RC ports
-SLAVES=192.168.1.101:12345,192.168.1.102:12345
+# Comma-separated list of worker devices with their IP addresses and RC ports
+WORKERS=192.168.1.101:12345,192.168.1.102:12345
 ```
 
-- **`MODE`**: Set to `master` for the controlling device or `slave` for devices receiving commands.
-- **`SLAVES`**: A list of slave devices (IP:port) that the master will control.
+- **`MODE`**: Set to `controller` for the controlling device or `worker` for devices receiving commands.
+- **`WORKERS`**: A list of worker devices (IP:port) that the controller will control.
 
 ---
 
@@ -90,7 +90,7 @@ SLAVES=192.168.1.101:12345,192.168.1.102:12345
 - Raspberry Pi or any Linux-based system
 - VLC Media Player installed on all devices
 - Python 3.6 or later
-- Network connectivity between master and slave devices
+- Network connectivity between controller and worker devices
 
 ---
 
@@ -101,7 +101,7 @@ SLAVES=192.168.1.101:12345,192.168.1.102:12345
   sudo journalctl -u vlc_sync_video_looper.service
   ```
 
-- **Slaves not reachable**: Ensure the IP addresses and ports in the configuration file are correct and that the devices are on the same network.
+- **Workers not reachable**: Ensure the IP addresses and ports in the configuration file are correct and that the devices are on the same network.
 
 - **VLC not installed**: Install VLC using:
   ```bash
