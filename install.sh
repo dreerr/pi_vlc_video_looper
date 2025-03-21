@@ -3,7 +3,7 @@
 set -e
 
 # Variables
-REPO_URL="https://github.com/dreerr/vlc_sync_video_looper.git"
+REPO_URL="https://github.com/dreerr/pi_vlc_video_looper.git"
 INSTALL_DIR="/opt/vlc_sync_video_looper"
 SCRIPT_NAME="loopvideos.py"
 SERVICE_NAME="vlc_sync_video_looper.service"
