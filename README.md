@@ -74,9 +74,6 @@ For Raspberry Pi installations, you can create an additional **exFAT partition**
      /dev/sdX1 /media/videos exfat defaults 0 0
      ```
 
-3. **Add Videos**:
-   - Place `.mp4` files and the `loopvideos.conf` file in the `/media/videos` directory.
-
 ---
 
 ## Troubleshooting
