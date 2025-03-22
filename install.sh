@@ -11,7 +11,7 @@ fi
 # Install required packages
 echo "Installing required packages..."
 apt-get update
-apt-get install -y python3 python3-venv python3-pip git
+apt-get install -y python3 python3-venv python3-pip git vlc
 
 # Variables
 REPO_URL="https://github.com/dreerr/pi_vlc_video_looper.git"
