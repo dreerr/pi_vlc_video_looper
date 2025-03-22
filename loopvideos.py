@@ -7,8 +7,8 @@ import time
 import socket
 import subprocess
 
-CONFIG_FILE = "/media/videos4k/loopvideos.conf"
-DEFAULT_MEDIA_DIR = "/media/videos4k/"
+CONFIG_FILE = "/media/videos/loopvideos.conf"
+DEFAULT_MEDIA_DIR = "/media/videos/"
 DEFAULT_RC_PORT = 12345
 
 
@@ -106,7 +106,7 @@ print("Starting VLC controller...")
 subprocess.Popen(CONTROLLER_COMMAND)
 
 # Start vlcsync in background
-VLCSYNC_COMMAND = ["/home/pi/vlcsync-venv/bin/vlcsync"]
+VLCSYNC_COMMAND = ["/opt/vlc_sync_video_looper/venv/bin/vlcsync"]
 for worker in reachable_workers:
     VLCSYNC_COMMAND.extend(["--rc-host", worker])
 
