@@ -37,7 +37,7 @@ This command will:
 
 ## Configuration
 
-The script uses a configuration file (`vlcsync.conf`) to define its behavior. The file should be placed in the same directory as the script or in a specified location.
+The script uses a configuration file (`loopvideos.conf`) to define its behavior. The file should be placed in the same directory as the script or in a specified location.
 
 ### Sample Configuration File
 
@@ -107,12 +107,6 @@ WORKERS=192.168.1.101:12345,192.168.1.102:12345
   ```bash
   sudo apt-get install -y vlc
   ```
-
----
-
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
 
 ---
 
