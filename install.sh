@@ -14,7 +14,7 @@ sudo apt-get install -y python3 python3-venv python3-pip git vlc
 # Variables
 REPO_URL="https://github.com/dreerr/pi_vlc_video_looper.git"
 INSTALL_DIR="/opt/vlc_sync_video_looper"
-SCRIPT_NAME="loopvideos.py"
+SCRIPT_NAME="video_looper.py"
 SERVICE_NAME="vlc_sync_video_looper.service"
 VENV_DIR="$INSTALL_DIR/venv"
 

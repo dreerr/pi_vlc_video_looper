@@ -7,7 +7,7 @@ import time
 import socket
 import subprocess
 
-CONFIG_FILE = "/media/videos/loopvideos.conf"
+CONFIG_FILE = "/media/videos/video_looper.conf"
 DEFAULT_MEDIA_DIR = "/media/videos/"
 DEFAULT_RC_PORT = 12345
 

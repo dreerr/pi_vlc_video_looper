@@ -40,7 +40,7 @@ This command will:
 
 ## Configuration
 
-The script uses a configuration file (`loopvideos.conf`) to define its behavior. The file should be placed in `/media/videos` along with the video files.
+The script uses a configuration file (`video_looper.conf`) to define its behavior. The file should be placed in `/media/videos` along with the video file.
 
 ### Sample Configuration File
 
@@ -60,7 +60,7 @@ WORKERS=192.168.1.101:12345,192.168.1.102:12345
 ## Video and Configuration File Management
 
 - **Video File**: Place a single `.mp4` video file in the `/media/videos` directory. The script will automatically loop this file.
-- **Configuration File**: The `loopvideos.conf` file should also be placed in `/media/videos`.
+- **Configuration File**: The `video_looper.conf` file should also be placed in `/media/videos`.
 
 ### Raspberry Pi Setup with an Additional Partition
 
