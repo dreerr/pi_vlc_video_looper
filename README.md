@@ -16,6 +16,7 @@ The script is installed as a systemd service, ensuring it starts automatically o
 - **Automatic Startup**: The script runs as a systemd service, starting automatically when the device boots.
 - **Flexible Configuration**: Easily configure controller and worker devices using a simple configuration file.
 - **Looping Playback**: Videos are looped seamlessly for continuous playback.
+- **Easy Video Management**: Videos and the configuration file are stored in `/media/videos`, making it simple to update or adjust the setup.
 
 ---
 
@@ -37,7 +38,7 @@ This command will:
 
 ## Configuration
 
-The script uses a configuration file (`loopvideos.conf`) to define its behavior. The file should be placed in the same directory as the script or in a specified location.
+The script uses a configuration file (`loopvideos.conf`) to define its behavior. The file should be placed in `/media/videos` along with the video files.
 
 ### Sample Configuration File
 
@@ -54,43 +55,27 @@ WORKERS=192.168.1.101:12345,192.168.1.102:12345
 
 ---
 
-## Usage
+## Video and Configuration File Management
 
-### Starting and Stopping the Service
+- **Video File**: Place a single `.mp4` video file in the `/media/videos` directory. The script will automatically loop this file.
+- **Configuration File**: The `loopvideos.conf` file should also be placed in `/media/videos`.
 
-- **Start the service**:
-  ```bash
-  sudo systemctl start vlc_sync_video_looper.service
-  ```
+### Raspberry Pi Setup with an Additional Partition
 
-- **Stop the service**:
-  ```bash
-  sudo systemctl stop vlc_sync_video_looper.service
-  ```
+For Raspberry Pi installations, you can create an additional **exFAT partition** on the SD card to store videos and the configuration file. This allows you to easily update the videos and configuration by inserting the SD card into a Mac or PC.
 
-- **Check the service status**:
-  ```bash
-  sudo systemctl status vlc_sync_video_looper.service
-  ```
+1. **Format the Partition**:
+   - Use a partitioning tool (e.g., `gparted`) to create an exFAT partition on the SD card.
+   - Mount the partition to `/media/videos`.
 
-- **Enable the service to start on boot**:
-  ```bash
-  sudo systemctl enable vlc_sync_video_looper.service
-  ```
+2. **Mount Automatically**:
+   - Add an entry to `/etc/fstab` to ensure the partition is mounted to `/media/videos` on boot:
+     ```fstab
+     /dev/sdX1 /media/videos exfat defaults 0 0
+     ```
 
-- **Disable the service**:
-  ```bash
-  sudo systemctl disable vlc_sync_video_looper.service
-  ```
-
----
-
-## Requirements
-
-- Raspberry Pi or any Linux-based system
-- VLC Media Player installed on all devices
-- Python 3.6 or later
-- Network connectivity between controller and worker devices
+3. **Add Videos**:
+   - Place `.mp4` files and the `loopvideos.conf` file in the `/media/videos` directory.
 
 ---
 
@@ -108,31 +93,4 @@ WORKERS=192.168.1.101:12345,192.168.1.102:12345
   sudo apt-get install -y vlc
   ```
 
----
 
-## Uninstallation
-
-To completely remove the VLC Sync Video Looper:
-
-1. Stop and disable the service:
-   ```bash
-   sudo systemctl stop vlc_sync_video_looper.service
-   sudo systemctl disable vlc_sync_video_looper.service
-   ```
-
-2. Remove the service file:
-   ```bash
-   sudo rm /etc/systemd/system/vlc_sync_video_looper.service
-   sudo systemctl daemon-reload
-   ```
-
-3. Delete the installation directory:
-   ```bash
-   sudo rm -rf /opt/vlc_sync_video_looper
-   ```
-
----
-
-## Acknowledgments
-
-Inspired by the [Adafruit Pi Video Looper](https://github.com/adafruit/pi_video_looper) project.
