@@ -42,16 +42,20 @@ if not DEFAULT_MEDIA_PATH:
     print("No .mp4 file found in the directory. Exiting.")
     exit(1)
 
-DEFAULT_WORKER_COMMAND = [
-    "vlc",
-    DEFAULT_MEDIA_PATH,
-    "--rc-host",
-    f"0.0.0.0:{DEFAULT_RC_PORT}",
+
+STANDARD_VLC_FLAGS = [
     "--fullscreen",
     "--loop",
     "--repeat",
     "--no-video-title",
 ]
+
+DEFAULT_WORKER_COMMAND = [
+    "vlc",
+    DEFAULT_MEDIA_PATH,
+    "--rc-host",
+    f"0.0.0.0:{DEFAULT_RC_PORT}",
+] + STANDARD_VLC_FLAGS
 
 # If config file does not exist, assume worker mode
 if not os.path.isfile(CONFIG_FILE):
@@ -115,16 +119,16 @@ while True:
 
 # Start controller VLC
 CONTROLLER_RC_HOST = "127.0.0.42"
-CONTROLLER_COMMAND = [
-    "vlc",
-    DEFAULT_MEDIA_PATH,
-    "--rc-host",
-    f"{CONTROLLER_RC_HOST}:{DEFAULT_RC_PORT}",
-    "--fullscreen",
-    "--loop",
-    "--repeat",
-    "--no-video-title",
-] + vlc_flags
+CONTROLLER_COMMAND = (
+    [
+        "vlc",
+        DEFAULT_MEDIA_PATH,
+        "--rc-host",
+        f"{CONTROLLER_RC_HOST}:{DEFAULT_RC_PORT}",
+    ]
+    + STANDARD_VLC_FLAGS
+    + vlc_flags
+)
 print("Starting VLC controller...")
 subprocess.Popen(CONTROLLER_COMMAND)
 
