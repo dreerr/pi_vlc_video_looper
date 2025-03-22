@@ -3,7 +3,7 @@
 The VLC Sync Video Looper is a Python-based solution for synchronizing and looping videos across multiple devices using VLC Media Player. This project is ideal for creating synchronized video displays, such as multi-screen installations or video walls.
 
 The script can operate in two modes:
-- **Controller Mode**: Controls playback and synchronization across all connected worker devices.
+- **Controller Mode**: Controls playback, synchronization across all connected worker devices and plays videos in sync.
 - **Worker Mode**: Receives commands from the controller and plays videos in sync.
 
 The script is installed as a systemd service, ensuring it starts automatically on boot.
