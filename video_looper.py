@@ -24,6 +24,16 @@ if not DEFAULT_MEDIA_PATH:
     print("No .mp4 file found in the directory. Exiting.")
     exit(1)
 
+# Read configuration
+config = {}
+with open(CONFIG_FILE, "r") as f:
+    for line in f:
+        key, value = line.strip().split("=", 1)
+        config[key.strip()] = value.strip()
+
+# Extract VLC flags if provided
+vlc_flags = config.get("VLC_FLAGS", "").split()
+
 DEFAULT_WORKER_COMMAND = [
     "vlc",
     DEFAULT_MEDIA_PATH,
@@ -33,20 +43,13 @@ DEFAULT_WORKER_COMMAND = [
     "--loop",
     "--repeat",
     "--no-video-title",
-]
+] + vlc_flags
 
 # If config file does not exist, assume worker mode
 if not os.path.isfile(CONFIG_FILE):
     print("No config found, running in default worker mode...")
     subprocess.run(DEFAULT_WORKER_COMMAND)
     exit(0)
-
-# Read configuration
-config = {}
-with open(CONFIG_FILE, "r") as f:
-    for line in f:
-        key, value = line.strip().split("=", 1)
-        config[key.strip()] = value.strip()
 
 # Validate config
 if "MODE" not in config or config["MODE"].lower() != "controller":
@@ -101,7 +104,7 @@ CONTROLLER_COMMAND = [
     "--loop",
     "--repeat",
     "--no-video-title",
-]
+] + vlc_flags
 print("Starting VLC controller...")
 subprocess.Popen(CONTROLLER_COMMAND)
 

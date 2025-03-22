@@ -31,7 +31,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/dreerr/vlc_sync_video_lo
 ```
 
 This command will:
-1. Install all required dependencies (Python, pip, git, etc.).
+1. Install all required dependencies (Python, VLC, pip, git, etc.).
 2. Clone the repository to `/opt/vlc_sync_video_looper`.
 3. Set up a Python virtual environment and install the necessary Python libraries.
 4. Create a systemd service to automatically start the script on boot.
@@ -50,10 +50,15 @@ MODE=controller
 
 # Comma-separated list of worker devices with their IP addresses and RC ports
 WORKERS=192.168.1.101:12345,192.168.1.102:12345
+
+# Additional VLC flags (optional)
+# Example: --no-audio --video-on-top
+VLC_FLAGS=--no-audio
 ```
 
 - **`MODE`**: Set to `controller` for the controlling device or `worker` for devices receiving commands.
 - **`WORKERS`**: A list of worker devices (IP:port) that the controller will control.
+- **`VLC_FLAGS`**: Optional additional flags to pass to VLC (e.g., `--no-audio`, `--video-on-top`).
 
 ---
 
@@ -86,10 +91,4 @@ For Raspberry Pi installations, you can create an additional **exFAT partition**
   ```
 
 - **Workers not reachable**: Ensure the IP addresses and ports in the configuration file are correct and that the devices are on the same network.
-
-- **VLC not installed**: Install VLC using:
-  ```bash
-  sudo apt-get install -y vlc
-  ```
-
 

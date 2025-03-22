@@ -4,3 +4,7 @@ MODE=controller
 # Comma-separated list of worker devices with their IP addresses and RC ports
 # Example: 192.168.1.101:12345,192.168.1.102:12345
 WORKERS=192.168.1.101:12345,192.168.1.102:12345
+
+# Additional VLC flags (optional)
+# Example: --no-audio --video-on-top
+VLC_FLAGS=--no-audio
